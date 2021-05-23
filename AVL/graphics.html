@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas class="myCanvas">
+        <p>Add suitable fallback here.</p>
+    </canvas>
+
+    <script>
+
+        const canvas = document.querySelector('.myCanvas');
+        const width = canvas.width = window.innerWidth;
+        const height = canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = 'rgb(255,255,255)';
+        ctx.fillRect(0, 0, width, height);
+        const node = canvas.getContext('2d')
+        function drawCircle(X, Y, canvas, radius = 20) {
+            var ctx = canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(X, Y, radius, 0, 2 * Math.PI, false);
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#FF0000';
+            ctx.stroke()
+            ctx.lineWidth = 1
+            ctx.strokeStyle = 'rgb(0,0,0)';
+            ctx.strokeText("0000", X - 10, Y)
+            console.log(ctx)
+            var x = X + radius * Math.cos(-225 * Math.PI / 180) * 1;
+            var y = Y + radius * Math.sin(-225 * Math.PI / 180) * 1;
+            console.log(x, y)
+            
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 5;
+
+            // draw a red line
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x-10, y+10);
+            ctx.stroke();
+
+
+
+        }
+        drawCircle(canvas.width / 2, 30, canvas)
+    </script>
+</body>
+
+</html>

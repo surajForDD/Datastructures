@@ -7,5 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "cli-progress": "^3.9.0",
+    "js-profiler": "^2.4.2"
+  }
 }

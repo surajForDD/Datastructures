@@ -1,4 +1,6 @@
 const Node = require('./Node')
+const drawHelper = require('./drawing.helper')
+const { createCanvas } = require('canvas')
 
 module.exports = class AVLTree {
 
@@ -17,11 +19,24 @@ module.exports = class AVLTree {
             let balance = this._calculate_balance(tempParent)
             tempParent.balance = balance
             // console.log(tempParent)
-            console.log(balance)
+            // console.log(balance)
             if (Math.abs(balance) > 1) {
                 // console.log("temp parent ", tempParent.data)
-                this._balance_using_rotate(tempParent)
+                try {
+                    this._balance_using_rotate(tempParent)
+                    //   tempParent = leafNode.parent
                 continue
+                }
+                catch(e){
+                    console.log(`error while insering ${value}`)
+                    this._assign_level()
+                    const canvas = createCanvas(5000, 2000)
+                    drawHelper.traversal(this.root, {x:2500,y:50},canvas)
+                    drawHelper.writeToFile(canvas)
+                    throw e 
+
+                }
+                
             }
             tempParent = tempParent.parent
         }
@@ -123,12 +138,10 @@ module.exports = class AVLTree {
     }
     _balance_using_rotate(node) {
         let grandFather = node
-        console.log("grand parent balance",node.balance)
+        // console.log("grand parent balance",node.balance)
+        // console.log("gra")
         let parent = node.balance > 0 ? node.left : node.right
-        this._calculate_balance(parent)
-        console.log("parent balance",parent.balance)
-        console.log(parent.left &&  parent.left.data)
-        console.log(parent.right &&  parent.right.data)
+        // console.log("parent balance",parent.balance)
         let child = parent.balance > 0 ? parent.left : parent.right
         if (grandFather.balance < 0 && parent.balance < 0) {
             this._rotate_left(grandFather, parent, child)
@@ -144,7 +157,7 @@ module.exports = class AVLTree {
 
     }
     _rotate_left(grandFather, parent, child) {
-        console.log("Rotating left")
+        // console.log("Rotating left")
         let grandFatherParent = grandFather.parent
         let tempLeftChildOfParent = parent.left
         if (grandFatherParent == null) {
@@ -154,6 +167,7 @@ module.exports = class AVLTree {
                 tempLeftChildOfParent.parent = grandFather
 
             }
+            grandFather.parent = parent 
             parent.parent = null
             this.root = parent
             return
@@ -165,7 +179,7 @@ module.exports = class AVLTree {
             if (tempLeftChildOfParent != null) {
                 tempLeftChildOfParent.parent = grandFather
             }
-
+            grandFather.parent = parent
             parent.parent = grandFatherParent
             grandFatherParent.left = parent
             return
@@ -176,6 +190,7 @@ module.exports = class AVLTree {
             if (tempLeftChildOfParent != null) {
                 tempLeftChildOfParent.parent = grandFather
             }
+            grandFather.parent = parent 
             parent.parent = grandFatherParent
             grandFatherParent.right = parent
             return
@@ -184,7 +199,7 @@ module.exports = class AVLTree {
 
     }
     _rotate_right(grandFather, parent, child) {
-        console.log("Rotating right")
+        // console.log("Rotating right")
         let grandFatherParent = grandFather.parent
         let tempRightChildOfParent = parent.right
         if (grandFatherParent == null) {
@@ -194,6 +209,7 @@ module.exports = class AVLTree {
                 tempRightChildOfParent.parent = grandFather
 
             }
+            grandFather.parent = parent 
             parent.parent = null
             this.root = parent
             return
@@ -205,7 +221,7 @@ module.exports = class AVLTree {
             if (tempRightChildOfParent != null) {
                 tempRightChildOfParent.parent = grandFather
             }
-
+            grandFather.parent = parent 
             parent.parent = grandFatherParent
             grandFatherParent.left = parent
             return
@@ -216,6 +232,7 @@ module.exports = class AVLTree {
             if (tempRightChildOfParent != null) {
                 tempRightChildOfParent.parent = grandFather
             }
+            grandFather.parent = parent 
             parent.parent = grandFatherParent
             grandFatherParent.right = parent
             return
@@ -224,7 +241,7 @@ module.exports = class AVLTree {
 
     }
     _rotate_right_left(grandFather, parent, child) {
-        console.log("Implementing right left ")
+        // console.log("Implementing right left ")
         let tempLeftOfChild = child.left
         let tempRightOfChild = child.right
         let grandFatherParent = grandFather.parent
@@ -258,7 +275,7 @@ module.exports = class AVLTree {
 
     }
     _rotate_left_right(grandFather, parent, child) {
-        console.log("implementing left right")
+        // console.log("implementing left right")
         let tempLeftOfChild = child.left
         let tempRightOfChild = child.right
         let grandFatherParent = grandFather.parent
@@ -281,10 +298,10 @@ module.exports = class AVLTree {
         grandFather.left = tempRightOfChild
         parent.right = tempLeftOfChild
         if (tempLeftOfChild != null) {
-            tempLeftOfChild.parent = grandFather
+            tempLeftOfChild.parent = parent
         }
         if (tempRightOfChild != null) {
-            tempRightOfChild.parent = parent
+            tempRightOfChild.parent = grandFather
 
         }
         return
